@@ -50,12 +50,3 @@ try:
 
 except KeyError:
     st.error("❌ Data for the selected month is not available. Please choose another month.")
-'''
-
-# Save the updated script
-with open("streamlit_app.py", "w") as f:
-    f.write(app_code)
-
-# Download it for deployment
-from google.colab import files
-files.download("streamlit_app.py")
