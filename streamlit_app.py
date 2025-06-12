@@ -1,4 +1,4 @@
-
+app_code = '''
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -15,7 +15,7 @@ forecast.set_index("year_month", inplace=True)
 
 # --- App title and instructions ---
 st.title("🚧 Road Accident Rate Forecast")
-st.markdown("Select a month between **2025 and 2027** to view forecasted weather conditions and predicted accident rate.")
+st.markdown("Select a month between **2025 and 2026** to view forecasted weather conditions and predicted accident rate.")
 
 # --- Date selector ---
 selected_date = st.date_input("📅 Select a future month:", min_value=datetime(2025, 1, 1), max_value=datetime(2027, 1, 1))
@@ -37,10 +37,26 @@ try:
     st.subheader(f"📊 Accident Forecast for {selected_ym.strftime('%B %Y')}")
     st.metric("🚦 Estimated Monthly Accidents", f"{predicted_accidents:.0f} cases")
 
-    # --- Show weather summary (non-lag values) ---
-    st.markdown("### 🌦️ Forecasted Weather")
-    weather_cols = [col for col in forecast.columns if '_lag_' not in col and col != "accident_count"]
-    st.dataframe(input_row[weather_cols].to_frame().T)
+    # --- Show weather summary in sentence format ---
+    st.markdown("### 🌦️ Forecasted Weather Summary")
+
+    st.markdown(f'''
+    - **Total daily rainfall**: {input_row['total_rainfall']:.1f} mm  
+    - **Mean temperature**: {input_row['mean_temp']:.1f} °C  
+    - **Maximum temperature**: {input_row['max_temp']:.1f} °C  
+    - **Minimum temperature**: {input_row['min_temp']:.1f} °C  
+    - **Mean wind speed**: {input_row['mean_wind']:.1f} km/h  
+    - **Maximum wind speed**: {input_row['max_wind']:.1f} km/h  
+    ''')
 
 except KeyError:
     st.error("❌ Data for the selected month is not available. Please choose another month.")
+'''
+
+# Save the updated script
+with open("streamlit_app.py", "w") as f:
+    f.write(app_code)
+
+# Download it for deployment
+from google.colab import files
+files.download("streamlit_app.py")
